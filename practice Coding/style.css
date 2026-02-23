@@ -1,12 +1,14 @@
 body {
-    width: 794px;
+    width: 50%;
     height: 1123px;
+    margin: auto;
     background-color: #FAF9F6;
     border-color: #008080;
     border-style: solid;
     padding-top: 30px;
     padding-bottom: 0px;
     padding-left: 50px;
+    padding-right: 0px;
 }
 
 .top-section {
@@ -51,6 +53,7 @@ h1 {
 
 .left-side {
     width: 40%;
+    margin-top: 0px;
 }
 
 .right-side {
