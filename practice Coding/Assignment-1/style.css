@@ -54,53 +54,7 @@ body {
     text-underline-offset: 10px;
 }
 
-/*
-.drop-down {
-    display: none;
-    list-style-type: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background-color: #1a1a1a;
-    padding: 15px;
-    margin: 0;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-    border-radius: 8px;
-    display: none;
-    
-    grid-template-columns: 1fr 1fr;
-    
-    gap: 15px;
-    min-width: 400px;
-}
 
-
-.navbar .drop-down li.menu-sub-items {
-    font-size: 14px;
-    color: #B3B3B3;
-    padding: 8px 12px;
-    border-radius: 4px;
-    transition: background-color 0.3s, color 0.3s;
-    margin-right: 0;
-
-}
-
-.navbar .drop-down li.menu-sub-items:hover {
-    color: white;
-    background-color: #333;
-    text-decoration: none;
-}
-
-
-
-.drop-down li:hover {
-    background-color: red;
-}
-
-.services:hover .drop-down {
-    display: grid;
-}
-*/
 
 .drop-down {
     display: none;
