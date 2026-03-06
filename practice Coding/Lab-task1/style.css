@@ -25,7 +25,7 @@ body {
     display: none;
 }
 
-.navbar>ul {
+.nav-list {
     list-style-type: none;
     display: flex;
     align-items: center;
@@ -37,7 +37,7 @@ body {
 
 
 
-.navbar>ul>li {
+.nav-list>li {
     position: relative;
     margin-right: 20px;
     cursor: pointer;
@@ -51,7 +51,7 @@ body {
     color: #B3B3B3;
 }
 
-.navbar>ul>li:hover {
+.nav-list>li:hover {
     color: white;
     text-decoration: underline;
     text-decoration-color: linear-gradient(to right, aqua, blue, purple);
@@ -82,6 +82,10 @@ body {
     align-items: center;
     flex-wrap: wrap;
 
+}
+
+.nav-list>li.services:hover{
+    text-decoration: none;
 }
 
 
@@ -626,9 +630,63 @@ body {
         width: 100%;
     }
 
-    .navbar>ul {
+    .nav-list {
         display: none;
+        flex-direction: column;
+        align-items: left;
+        justify-content: center;
+        position: absolute;
+        top: 60px;
+        right: 0;
+        background-color: #1a1a1a;
+        z-index: 1;
+        width: 180px;
+        height:auto;
+        padding: 20px;
+        gap:10px;
+        border-radius: 10px;
+        
     }
+
+    .services{
+        position: absolute;
+    }
+
+
+    .drop-down{
+        position: relative;
+        top: 7px;
+        left: 10px;
+        width:150px;
+        height:auto;
+        gap:5px;
+        border-radius: 10px;
+        z-index: 10;
+    }
+
+    .services:hover{
+        display:flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+
+    .navbar .drop-down .menu-sub-items {
+    width: 100%;
+    margin: auto;
+    font-size: 9px;
+    padding-block: 10px;
+    text-decoration: none;
+    }
+
+
+
+    .navbar .drop-down .menu-sub-items:hover {
+    color: #fff;
+    font-size: 10px;
+}
+
 
 
     .menu-icon {
