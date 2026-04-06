@@ -84,7 +84,7 @@ body {
 
 }
 
-.nav-list>li.services:hover{
+.nav-list>li.services:hover {
     text-decoration: none;
 }
 
@@ -258,10 +258,8 @@ body {
 }
 
 .all-services {
-    display: inline-flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
+    display: block; /* Let Slick handle layout */
+    width: 100%;
     margin-top: 20px;
     color: #f1f1f1;
 }
@@ -277,8 +275,8 @@ body {
     background-color: #1a1a1a;
     padding: 20px;
     margin: 10px;
-    width: 28%;
     height: 180px;
+    outline: none; /* Remove Slick focus outline */
 }
 
 .service-line {
@@ -321,6 +319,45 @@ body {
 .service-cta:hover {
     font-size: 17px;
     cursor: pointer;
+}
+
+/* Carousel Controls Styling */
+.services-carousel-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 40px;
+    width: 100%;
+    color: #f1f1f1;
+}
+
+.carousel-btn {
+    padding: 10px 25px;
+    background: transparent;
+    border: 1px solid oklch(70.8% 0 0);
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.3s ease;
+    font-size: 14px;
+}
+
+.carousel-btn:hover {
+    background: linear-gradient(to right, white, grey);
+    color: #0F0E0E;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+}
+
+#slide-counter {
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    min-width: 140px;
+    text-align: center;
+    color: #B3B3B3;
 }
 
 
@@ -641,31 +678,31 @@ body {
         background-color: #1a1a1a;
         z-index: 1;
         width: 180px;
-        height:auto;
+        height: auto;
         padding: 20px;
-        gap:10px;
+        gap: 10px;
         border-radius: 10px;
-        
+
     }
 
-    .services{
+    .services {
         position: absolute;
     }
 
 
-    .drop-down{
+    .drop-down {
         position: relative;
         top: 7px;
         left: 10px;
-        width:150px;
-        height:auto;
-        gap:5px;
+        width: 150px;
+        height: auto;
+        gap: 5px;
         border-radius: 10px;
         z-index: 10;
     }
 
-    .services:hover{
-        display:flex;
+    .services:hover {
+        display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
@@ -673,19 +710,19 @@ body {
 
 
     .navbar .drop-down .menu-sub-items {
-    width: 100%;
-    margin: auto;
-    font-size: 9px;
-    padding-block: 10px;
-    text-decoration: none;
+        width: 100%;
+        margin: auto;
+        font-size: 9px;
+        padding-block: 10px;
+        text-decoration: none;
     }
 
 
 
     .navbar .drop-down .menu-sub-items:hover {
-    color: #fff;
-    font-size: 10px;
-}
+        color: #fff;
+        font-size: 10px;
+    }
 
 
 
@@ -770,14 +807,12 @@ body {
     }
 
     .all-services {
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
+        margin-top: 20px;
     }
 
     .service-card {
-        width: 80%;
         height: auto;
+        min-height: 200px;
     }
 
     .hyphen {
@@ -823,7 +858,7 @@ body {
 
     .stand-out-card {
         width: 40%;
-        height:auto;
+        height: auto;
         padding: 5px;
     }
 
