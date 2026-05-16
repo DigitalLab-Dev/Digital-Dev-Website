@@ -1,0 +1,7 @@
+extends layout
+
+block content
+  .error-container
+    h1 500 - Server Error
+    p= error || 'An unexpected error occurred'
+    a.btn.btn-primary(href='/') Go to Home

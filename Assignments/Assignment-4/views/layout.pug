@@ -1,0 +1,55 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    meta(name='viewport' content='width=device-width, initial-scale=1')
+    title= title || 'Naqvix - Digital Services'
+    link(rel='stylesheet' href='/stylesheets/style.css')
+    link(rel='stylesheet' href='/stylesheets/layout.css')
+    link(rel='stylesheet' href='/stylesheets/services.css')
+  body
+    nav.navbar
+      img.logo(src='/images/whiteLogo.webp' alt='Naqvix Logo' width='200' height='60')
+      ul.nav-list
+        li
+          a(href='/') Home
+        li
+          a(href='/services') Services
+        li About
+        li Contact
+      img#hamburger.menu-icon(src='/images/menu.png' alt='Menu' width='40' height='40')
+
+    main.main-content
+      block content
+
+    footer.footer
+      .footer-content
+        .logo-section
+          img(src='/images/whiteLogo.webp' alt='Naqvix' width='180' height='100')
+        .links-section
+          h3 Links
+          ul
+            li
+              a(href='/') Home
+            li
+              a(href='/services') Services
+            li About
+            li Contact
+        .links-section
+          h3 Company
+          ul
+            li
+              a(href='#') About Us
+            li
+              a(href='#') Team
+            li
+              a(href='#') Blog
+            li
+              a(href='#') Careers
+        .contact-section
+          h3 Contact
+          p Email: info@naqvix.com
+          p Phone: +92 328 9660289
+
+    script(src='/javascripts/main.js')
+    block scripts

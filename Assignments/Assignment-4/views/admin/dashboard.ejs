@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f5f5;
+      color: #333;
+    }
+
+    .admin-container {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      min-height: 100vh;
+    }
+
+    .admin-sidebar {
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+      color: #fff;
+      padding: 30px 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .sidebar-logo {
+      padding: 0 20px 30px;
+      border-bottom: 1px solid #444;
+      text-align: center;
+      font-size: 20px;
+      font-weight: bold;
+      color: #007bff;
+    }
+
+    .sidebar-menu {
+      list-style: none;
+      margin-top: 20px;
+    }
+
+    .sidebar-menu li {
+      margin: 0;
+    }
+
+    .sidebar-menu a {
+      display: block;
+      padding: 15px 20px;
+      color: #b3b3b3;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      border-left: 3px solid transparent;
+    }
+
+    .sidebar-menu a:hover,
+    .sidebar-menu a.active {
+      background-color: #333;
+      color: #007bff;
+      border-left-color: #007bff;
+      padding-left: 30px;
+    }
+
+    .sidebar-logout {
+      position: absolute;
+      bottom: 20px;
+      width: 100%;
+      padding: 0 20px;
+    }
+
+    .sidebar-logout a {
+      display: block;
+      padding: 12px 15px;
+      background-color: #dc3545;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      text-align: center;
+      transition: background-color 0.3s ease;
+    }
+
+    .sidebar-logout a:hover {
+      background-color: #c82333;
+    }
+
+    .admin-main {
+      display: flex;
+      flex-direction: column;
+      background-color: #f5f5f5;
+    }
+
+    .admin-header {
+      background-color: #fff;
+      padding: 20px 30px;
+      border-bottom: 1px solid #ddd;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .admin-header h1 {
+      font-size: 24px;
+      color: #333;
+    }
+
+    .admin-content {
+      flex: 1;
+      padding: 30px;
+      overflow-y: auto;
+    }
+
+    .page-title {
+      font-size: 28px;
+      margin-bottom: 30px;
+      color: #333;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #007bff;
+    }
+
+    .alert {
+      padding: 15px 20px;
+      margin-bottom: 20px;
+      border-radius: 5px;
+      border-left: 4px solid #28a745;
+      background-color: #d4edda;
+      color: #155724;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 14px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+
+    .btn-primary {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: #0056b3;
+    }
+
+    .btn-danger {
+      background-color: #dc3545;
+      color: white;
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+
+    .btn-danger:hover {
+      background-color: #c82333;
+    }
+
+    .btn-secondary {
+      background-color: #6c757d;
+      color: white;
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+
+    .btn-secondary:hover {
+      background-color: #5a6268;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: white;
+      border-radius: 5px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .table thead {
+      background-color: #f8f9fa;
+      border-bottom: 2px solid #dee2e6;
+    }
+
+    .table th {
+      padding: 15px;
+      text-align: left;
+      font-weight: 600;
+      color: #333;
+      font-size: 14px;
+    }
+
+    .table td {
+      padding: 15px;
+      border-bottom: 1px solid #dee2e6;
+      font-size: 14px;
+    }
+
+    .table tbody tr:hover {
+      background-color: #f8f9fa;
+    }
+
+    .category-badge {
+      display: inline-block;
+      padding: 5px 10px;
+      background-color: #e7f3ff;
+      color: #007bff;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .no-data {
+      text-align: center;
+      padding: 40px;
+      color: #999;
+    }
+
+    @media (max-width: 768px) {
+      .admin-container {
+        grid-template-columns: 1fr;
+      }
+
+      .admin-sidebar {
+        height: auto;
+      }
+
+      .table {
+        font-size: 12px;
+      }
+
+      .table th,
+      .table td {
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-container">
+    <!-- Sidebar -->
+    <div class="admin-sidebar">
+      <div class="sidebar-logo">🔐 Admin Panel</div>
+      <ul class="sidebar-menu">
+        <li><a href="/admin/dashboard" class="active">📊 Dashboard</a></li>
+        <li><a href="/admin/create">➕ Add Service</a></li>
+      </ul>
+      <div class="sidebar-logout">
+        <a href="/admin/logout">🚪 Logout</a>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="admin-main">
+      <div class="admin-header">
+        <h1><%= pageTitle %></h1>
+        <a href="/admin/create" class="btn btn-primary">➕ Add New Service</a>
+      </div>
+
+      <div class="admin-content">
+        <h2 class="page-title">Services Management</h2>
+
+        <% if (typeof success !== 'undefined') { %>
+          <div class="alert">✓ <%= success %></div>
+        <% } %>
+
+        <% if (services && services.length > 0) { %>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Service Name</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Rating</th>
+                <th>Description</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% services.forEach(service => { %>
+                <tr>
+                  <td><strong><%= service.name %></strong></td>
+                  <td><span class="category-badge"><%= service.category %></span></td>
+                  <td>${<%= service.price %></td>
+                  <td>⭐ <%= service.rating %>/5</td>
+                  <td><%= service.description.substring(0, 50) %>...</td>
+                  <td>
+                    <div class="action-buttons">
+                      <a href="/admin/edit/<%= service._id %>" class="btn btn-secondary">✏️ Edit</a>
+                      <button class="btn btn-danger" onclick="deleteService('<%= service._id %>', '<%= service.name %>')">🗑️ Delete</button>
+                    </div>
+                  </td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        <% } else { %>
+          <div class="no-data">
+            <p>📭 No services found. <a href="/admin/create">Create one now!</a></p>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function deleteService(id, name) {
+      if (confirm(`Are you sure you want to delete "${name}"?\n\nThis action cannot be undone.`)) {
+        fetch(`/admin/${id}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            alert('✓ Service deleted successfully');
+            location.reload();
+          } else {
+            alert('❌ Error: ' + data.message);
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('❌ Failed to delete service');
+        });
+      }
+    }
+  </script>
+</body>
+</html>

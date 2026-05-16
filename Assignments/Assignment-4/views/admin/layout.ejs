@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> - Naqvix Admin</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f5f5;
+      color: #333;
+    }
+
+    .admin-container {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .admin-sidebar {
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+      color: #fff;
+      padding: 30px 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .sidebar-logo {
+      padding: 0 20px 30px;
+      border-bottom: 1px solid #444;
+      text-align: center;
+      font-size: 20px;
+      font-weight: bold;
+      color: #007bff;
+    }
+
+    .sidebar-menu {
+      list-style: none;
+      margin-top: 20px;
+    }
+
+    .sidebar-menu li {
+      margin: 0;
+    }
+
+    .sidebar-menu a {
+      display: block;
+      padding: 15px 20px;
+      color: #b3b3b3;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      border-left: 3px solid transparent;
+    }
+
+    .sidebar-menu a:hover {
+      background-color: #333;
+      color: #007bff;
+      border-left-color: #007bff;
+      padding-left: 30px;
+    }
+
+    .sidebar-menu a.active {
+      background-color: #333;
+      color: #007bff;
+      border-left-color: #007bff;
+    }
+
+    .sidebar-logout {
+      position: absolute;
+      bottom: 20px;
+      width: 100%;
+      padding: 0 20px;
+    }
+
+    .sidebar-logout a {
+      display: block;
+      padding: 12px 15px;
+      background-color: #dc3545;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      text-align: center;
+      transition: background-color 0.3s ease;
+    }
+
+    .sidebar-logout a:hover {
+      background-color: #c82333;
+    }
+
+    /* Main Content */
+    .admin-main {
+      display: flex;
+      flex-direction: column;
+      background-color: #f5f5f5;
+    }
+
+    /* Header */
+    .admin-header {
+      background-color: #fff;
+      padding: 20px 30px;
+      border-bottom: 1px solid #ddd;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .admin-header h1 {
+      font-size: 24px;
+      color: #333;
+    }
+
+    .admin-user {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      font-size: 14px;
+      color: #666;
+    }
+
+    /* Content Area */
+    .admin-content {
+      flex: 1;
+      padding: 30px;
+      overflow-y: auto;
+    }
+
+    /* Alert Messages */
+    .alert {
+      padding: 15px 20px;
+      margin-bottom: 20px;
+      border-radius: 5px;
+      border-left: 4px solid;
+    }
+
+    .alert.success {
+      background-color: #d4edda;
+      border-left-color: #28a745;
+      color: #155724;
+    }
+
+    .alert.error {
+      background-color: #f8d7da;
+      border-left-color: #dc3545;
+      color: #721c24;
+    }
+
+    .alert.info {
+      background-color: #d1ecf1;
+      border-left-color: #17a2b8;
+      color: #0c5460;
+    }
+
+    /* Page Title */
+    .page-title {
+      font-size: 28px;
+      margin-bottom: 30px;
+      color: #333;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #007bff;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 14px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+
+    .btn-primary {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: #0056b3;
+      box-shadow: 0 3px 10px rgba(0, 123, 255, 0.3);
+    }
+
+    .btn-success {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .btn-success:hover {
+      background-color: #218838;
+    }
+
+    .btn-danger {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background-color: #c82333;
+    }
+
+    .btn-secondary {
+      background-color: #6c757d;
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background-color: #5a6268;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    /* Forms */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #333;
+      font-size: 14px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-family: inherit;
+      font-size: 14px;
+      transition: border-color 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #007bff;
+      box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    /* Tables */
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: white;
+      border-radius: 5px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .table thead {
+      background-color: #f8f9fa;
+      border-bottom: 2px solid #dee2e6;
+    }
+
+    .table th {
+      padding: 15px;
+      text-align: left;
+      font-weight: 600;
+      color: #333;
+      font-size: 14px;
+    }
+
+    .table td {
+      padding: 15px;
+      border-bottom: 1px solid #dee2e6;
+      font-size: 14px;
+    }
+
+    .table tbody tr:hover {
+      background-color: #f8f9fa;
+    }
+
+    .table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Action buttons in table */
+    .action-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .action-buttons .btn {
+      padding: 8px 12px;
+      font-size: 12px;
+      text-decoration: none;
+    }
+
+    .category-badge {
+      display: inline-block;
+      padding: 5px 10px;
+      background-color: #e7f3ff;
+      color: #007bff;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .admin-container {
+        grid-template-columns: 1fr;
+      }
+
+      .admin-sidebar {
+        height: auto;
+        position: relative;
+      }
+
+      .sidebar-logout {
+        position: static;
+        padding: 20px;
+        margin-top: 20px;
+        border-top: 1px solid #444;
+      }
+
+      .admin-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+      }
+
+      .table {
+        font-size: 12px;
+      }
+
+      .table th,
+      .table td {
+        padding: 10px;
+      }
+
+      .action-buttons {
+        flex-direction: column;
+      }
+
+      .action-buttons .btn {
+        width: 100%;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <% if (typeof showSidebar === 'undefined' || showSidebar) { %>
+  <div class="admin-container">
+    <!-- Sidebar -->
+    <div class="admin-sidebar">
+      <div class="sidebar-logo">🔐 Admin Panel</div>
+      <ul class="sidebar-menu">
+        <li><a href="/admin/dashboard" class="<%= pageTitle === 'All Services' ? 'active' : '' %>">📊 Dashboard</a></li>
+        <li><a href="/admin/create" class="<%= pageTitle === 'Create Service' ? 'active' : '' %>">➕ Add Service</a></li>
+      </ul>
+      <div class="sidebar-logout">
+        <a href="/admin/logout">🚪 Logout</a>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="admin-main">
+      <div class="admin-header">
+        <h1><%= pageTitle %></h1>
+        <div class="admin-user">
+          <span>👤 Admin User</span>
+        </div>
+      </div>
+      <div class="admin-content">
+        <%- body %>
+      </div>
+    </div>
+  </div>
+  <% } else { %>
+  <div class="admin-content" style="max-width: 500px; margin: 0 auto;">
+    <%- body %>
+  </div>
+  <% } %>
+</body>
+</html>
