@@ -1,0 +1,21 @@
+extends layout
+
+block content
+    include ./navbar.pug 
+    .row
+        .col-sm-8 
+            h1=title
+        .col-sm-4
+            a(href="/addproduct" class="btn btn-primary float-right") Add Product
+    table.table 
+        thead 
+            tr 
+                th Name 
+                th Price 
+                th Description
+        tbody 
+            for product in products 
+                tr 
+                    td=product.name 
+                    td=product.price 
+                    td=product.description

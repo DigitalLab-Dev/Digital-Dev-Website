@@ -1,0 +1,20 @@
+{
+  "name": "lab-task2-express",
+  "version": "1.0.0",
+  "description": "Naqvix - Online Digital Marketing Platform (Express Version)",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "keywords": ["naqvix", "digital-marketing", "express"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "ejs": "^3.1.8"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "nodepractice",
+  "version": "2.0.0",
+  "description": "A simple calculator module for basic arithmetic operations",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "calculator",
+    "sum",
+    "substract",
+    "product",
+    "devide"
+  ],
+  "author": "Syed Ali Turab",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "express": "^5.2.1",
+    "mongoose": "^9.6.2"
+  }
+}
