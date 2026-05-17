@@ -1,0 +1,87 @@
+extends layout
+
+block content
+  .orders-container
+    .breadcrumb
+      a(href='/') Home
+      span /
+      span My Orders
+
+    h1 My Orders
+
+    if (!user)
+      .login-required
+        .alert.alert-warning
+          p 🔐 Please login to view your orders.
+          a.btn.btn-primary(href='/auth/login') Login
+    else
+      if orders.length === 0
+        .empty-orders
+          .empty-icon 📦
+          p You haven't placed any orders yet.
+          a.btn.btn-primary(href='/services') Browse Services
+      else
+        .orders-list
+          each order in orders
+            .order-card
+              .order-header
+                .order-info
+                  h3 Order ##{order._id}
+                  p Placed on #{new Date(order.createdAt).toLocaleDateString()} at #{new Date(order.createdAt).toLocaleTimeString()}
+
+                .order-status
+                  span.status-badge(class='status-' + order.status)= order.status
+                  span.payment-badge(class='payment-' + order.paymentStatus)= order.paymentStatus
+
+              .order-services
+                h4 Services:
+                ul
+                  each service in order.services
+                    li
+                      .service-item
+                        .service-name= service.serviceName
+                        .service-qty Quantity: #{service.quantity}
+                      .service-price $#{service.price * service.quantity}
+
+              .order-footer
+                .order-total
+                  span Total:
+                  span.amount $#{order.totalAmount}
+
+                .order-notes
+                  if order.description
+                    p
+                      strong Description:
+                      br
+                      = order.description
+
+                  if order.notes
+                    p
+                      strong Notes:
+                      br
+                      = order.notes
+
+              .order-actions
+                button.btn.btn-small.btn-outline(onclick=`viewOrderDetails('${order._id}')`) 
+                  | View Details
+
+        // Pagination
+        if totalPages > 1
+          .pagination-orders
+            if page > 1
+              a.page-link(href=`/orders?page=${page - 1}`) ← Previous
+
+            each pageNum in paginationArray
+              if pageNum === page
+                span.page-link.active= pageNum
+              else
+                a.page-link(href=`/orders?page=${pageNum}`)= pageNum
+
+            if page < totalPages
+              a.page-link(href=`/orders?page=${page + 1}`) Next →
+
+block scripts
+  script.
+    function viewOrderDetails(orderId) {
+      alert('Order Details:\nID: ' + orderId + '\n\nFull order details page coming soon!');
+    }

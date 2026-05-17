@@ -1,0 +1,141 @@
+extends layout
+
+block content
+  .service-detail-container
+    .breadcrumb
+      a(href='/') Home
+      span /
+      a(href='/services') Services
+      span /
+      span= service.name
+
+    .service-detail-content
+      .service-detail-left
+        .service-image
+          img(src=service.image alt=service.name)
+
+        .service-info
+          h1= service.name
+          
+          .rating
+            span.stars
+              each i in [1, 2, 3, 4, 5]
+                if i <= service.rating
+                  span ★
+                else
+                  span ☆
+            span.rating-value #{service.rating}/5
+
+          .badge-group
+            span.badge= service.category
+            span.badge.featured(style=service.featured ? '' : 'display:none;') Featured
+
+      .service-detail-right
+        .price-section
+          .price-display
+            span.currency $
+            span.amount= service.price
+            span.period (One-time)
+
+        .add-to-cart-section
+          .quantity-selector
+            label Quantity:
+            button#decreaseQty(type='button' onclick='decreaseQuantity()') −
+            input#quantity(type='number' value='1' min='1' readonly)
+            button#increaseQty(type='button' onclick='increaseQuantity()') +
+
+          button#addToCartBtn.btn.btn-primary.btn-large(onclick='addToCart()') 
+            | 🛒 Add to Cart
+
+          button.btn.btn-outline(onclick='viewCart()') View Cart
+
+    .service-description
+      h2 Service Description
+      p= service.description
+
+      h3 What's Included (Outcomes):
+      ul.outcomes-list
+        each outcome in service.outcomes
+          li
+            span.check-icon ✓
+            span= outcome
+
+    .related-services
+      h2 Related Services
+      .services-grid-small
+        - const relatedServices = allServices.filter(s => s.category === service.category && s._id.toString() !== service._id.toString()).slice(0, 3)
+        if relatedServices.length > 0
+          each related in relatedServices
+            .service-card-small
+              .service-badge= related.category
+              h4= related.name
+              p.price $#{related.price}
+              a.btn.btn-sm.btn-primary(href=`/service/${related._id}`) View Details
+        else
+          p No related services available.
+
+block scripts
+  script.
+    const serviceId = '#{service._id}';
+    const serviceName = '#{service.name}';
+    const servicePrice = #{service.price};
+
+    function getCart() {
+      const cart = localStorage.getItem('naqvixCart');
+      return cart ? JSON.parse(cart) : [];
+    }
+
+    function saveCart(cart) {
+      localStorage.setItem('naqvixCart', JSON.stringify(cart));
+    }
+
+    function increaseQuantity() {
+      const qty = document.getElementById('quantity');
+      qty.value = parseInt(qty.value) + 1;
+    }
+
+    function decreaseQuantity() {
+      const qty = document.getElementById('quantity');
+      if (parseInt(qty.value) > 1) {
+        qty.value = parseInt(qty.value) - 1;
+      }
+    }
+
+    function addToCart() {
+      const quantity = parseInt(document.getElementById('quantity').value);
+      const cart = getCart();
+
+      // Check if service already in cart
+      const existingItem = cart.find(item => item.serviceId === serviceId);
+
+      if (existingItem) {
+        existingItem.quantity += quantity;
+      } else {
+        cart.push({
+          serviceId: serviceId,
+          serviceName: serviceName,
+          price: servicePrice,
+          quantity: quantity
+        });
+      }
+
+      saveCart(cart);
+      alert(`✓ Added ${quantity} × ${serviceName} to cart!`);
+      updateCartBadge();
+    }
+
+    function viewCart() {
+      window.location.href = '/cart';
+    }
+
+    function updateCartBadge() {
+      const cart = getCart();
+      const total = cart.reduce((sum, item) => sum + item.quantity, 0);
+      const badge = document.getElementById('cartBadge');
+      if (badge) {
+        badge.textContent = total;
+        badge.style.display = total > 0 ? 'block' : 'none';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', updateCartBadge);

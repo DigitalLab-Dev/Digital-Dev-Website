@@ -1,0 +1,226 @@
+extends layout
+
+block content
+  .checkout-container
+    .breadcrumb
+      a(href='/') Home
+      span /
+      a(href='/cart') Cart
+      span /
+      span Checkout
+
+    h1 Checkout
+
+    if (!user)
+      .login-required
+        .alert.alert-warning
+          p 🔐 You must be logged in to place an order.
+          a.btn.btn-primary(href='/auth/login') Login to Continue
+    else
+      .checkout-content
+        .checkout-left
+          .checkout-section
+            h2 Order Details
+
+            .form-group
+              label Name:
+              input.form-control(type='text' value=user.name readonly)
+
+            .form-group
+              label Email:
+              input.form-control(type='email' value=user.email readonly)
+
+          .checkout-section
+            h2 Service Description
+
+            .form-group
+              label What services do you need? (Brief description)
+              textarea#description.form-control(rows='4' placeholder='Describe your requirements...') #{description || ''}
+
+            .form-group
+              label Special Notes / Instructions (Optional)
+              textarea#notes.form-control(rows='3' placeholder='Any special requests or additional information...') #{notes || ''}
+
+        .checkout-right
+          .order-summary
+            h2 Order Summary
+
+            .order-items
+              h3 Services:
+              ul#orderItemsList
+                li No items in cart
+
+            hr
+
+            .summary-row
+              span Subtotal:
+              span#subtotalAmount $0
+
+            .summary-row
+              span Tax (0%):
+              span $0
+
+            .summary-row.total
+              span Total Amount:
+              span#totalAmount.total-amount $0
+
+            .payment-info
+              p 💳 Payment will be processed after order placement.
+
+            button#placeOrderBtn.btn.btn-primary.btn-large(onclick='placeOrder()')
+              | ✓ Place Order
+
+            button.btn.btn-outline(onclick='backToCart()')
+              | ← Back to Cart
+
+  .modal(id='orderModal' style='display:none;')
+    .modal-content
+      .modal-header
+        h3 ✓ Order Placed Successfully!
+      .modal-body
+        p#orderMessage
+        .order-details
+          p Order ID: 
+            strong#orderId
+          p Total Amount: 
+            strong#orderAmount
+          p Status: 
+            strong Pending
+      .modal-footer
+        button.btn.btn-primary(onclick='viewOrders()') View My Orders
+
+block scripts
+  script.
+    const user = !{JSON.stringify(user)};
+
+    function getCart() {
+      const cart = localStorage.getItem('naqvixCart');
+      return cart ? JSON.parse(cart) : [];
+    }
+
+    function renderOrderSummary() {
+      const cart = getCart();
+      const itemsList = document.getElementById('orderItemsList');
+      
+      if (cart.length === 0) {
+        itemsList.innerHTML = '<li>No items in cart</li>';
+        document.getElementById('subtotalAmount').textContent = '$0';
+        document.getElementById('totalAmount').textContent = '$0';
+        return;
+      }
+
+      let html = '';
+      let total = 0;
+
+      cart.forEach(item => {
+        const subtotal = item.price * item.quantity;
+        total += subtotal;
+        html += `
+          <li>
+            <div class="item-details">
+              <span>${item.serviceName}</span>
+              <span class="qty">(× ${item.quantity})</span>
+            </div>
+            <span class="price">$${subtotal}</span>
+          </li>
+        `;
+      });
+
+      itemsList.innerHTML = html;
+      document.getElementById('subtotalAmount').textContent = '$' + total;
+      document.getElementById('totalAmount').textContent = '$' + total;
+    }
+
+    function backToCart() {
+      window.location.href = '/cart';
+    }
+
+    function placeOrder() {
+      const description = document.getElementById('description').value;
+      const notes = document.getElementById('notes').value;
+      const cart = getCart();
+
+      if (cart.length === 0) {
+        alert('Your cart is empty!');
+        backToCart();
+        return;
+      }
+
+      if (!description.trim()) {
+        alert('Please describe your service requirements');
+        return;
+      }
+
+      const btn = document.getElementById('placeOrderBtn');
+      btn.disabled = true;
+      btn.textContent = '⏳ Processing...';
+
+      const orderData = {
+        services: cart.map(item => ({
+          serviceId: item.serviceId,
+          quantity: item.quantity
+        })),
+        description: description,
+        notes: notes
+      };
+
+      const token = localStorage.getItem('authToken');
+
+      if (!token) {
+        alert('Authentication required. Please login again.');
+        window.location.href = '/auth/login';
+        return;
+      }
+
+      fetch('/api/v1/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(orderData)
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          localStorage.removeItem('naqvixCart');
+
+          document.getElementById('orderMessage').textContent = 
+            `Order placed successfully! We've received your request for ${cart.length} service(s).`;
+          document.getElementById('orderId').textContent = data.data.order.id;
+          document.getElementById('orderAmount').textContent = '$' + data.data.order.totalAmount;
+          document.getElementById('orderModal').style.display = 'block';
+        } else {
+          alert('Error: ' + data.message);
+          btn.disabled = false;
+          btn.textContent = '✓ Place Order';
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to place order. Please try again.');
+        btn.disabled = false;
+        btn.textContent = '✓ Place Order';
+      });
+    }
+
+    function viewOrders() {
+      window.location.href = '/orders';
+    }
+
+    document.getElementById('description').addEventListener('change', function() {
+      sessionStorage.setItem('checkoutDescription', this.value);
+    });
+
+    document.getElementById('notes').addEventListener('change', function() {
+      sessionStorage.setItem('checkoutNotes', this.value);
+    });
+
+    window.addEventListener('load', function() {
+      const savedDesc = sessionStorage.getItem('checkoutDescription');
+      const savedNotes = sessionStorage.getItem('checkoutNotes');
+      if (savedDesc) document.getElementById('description').value = savedDesc;
+      if (savedNotes) document.getElementById('notes').value = savedNotes;
+      renderOrderSummary();
+    });
+

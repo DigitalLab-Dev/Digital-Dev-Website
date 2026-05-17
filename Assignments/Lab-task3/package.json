@@ -1,0 +1,29 @@
+{
+  "name": "lab-task-3",
+  "version": "1.0.0",
+  "description": "Digital Services Platform with User Authentication & Role-Based Access Control",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "seed": "node scripts/seedServices.js"
+  },
+  "keywords": ["naqvix", "authentication", "rbac", "services", "mongodb", "crud", "multer"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "pug": "^3.0.2",
+    "ejs": "^3.1.9",
+    "mongoose": "^7.0.0",
+    "dotenv": "^16.0.3",
+    "multer": "^1.4.5-lts.1",
+    "express-session": "^1.17.3",
+    "connect-mongo": "^5.0.0",
+    "bcryptjs": "^2.4.3",
+    "connect-flash": "^0.1.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
