@@ -98,6 +98,26 @@ test-results/
 *.swp
 *.swo
 .project
+
+# ============================================================================
+# DOCUMENTATION FILES (Keep only README.md with project setup instructions)
+# ============================================================================
+BEGINNER_COMPLETE_GUIDE.md
+DOCUMENTATION_INDEX.md
+FINAL_SETUP_SUMMARY.md
+QUICK_START_GUIDE.md
+QUICK_START.md
+ORDER_TRACKING_AND_ADMIN_GUIDE.md
+BEFORE_AFTER_ANALYSIS.md
+SUMMARY_GUIDE.md
+COMPLETE_SOLUTION.md
+COMPLETION_SUMMARY.md
+API_DOCUMENTATION.md
+DELIVERY_SUMMARY.md
+LAB_TASK3_DOCUMENTATION.md
+TEST_REPORT.md
+TEST_RESULTS.md
+!README.md
 .classpath
 .c9/
 *.launch
