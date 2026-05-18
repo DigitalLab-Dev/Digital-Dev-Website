@@ -1,0 +1,129 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    meta(name='viewport' content='width=device-width, initial-scale=1')
+    title= title || 'Naqvix - Digital Services'
+    link(rel='stylesheet' href='/stylesheets/style.css')
+    link(rel='stylesheet' href='/stylesheets/layout.css')
+    link(rel='stylesheet' href='/stylesheets/services.css')
+    link(rel='stylesheet' href='/stylesheets/cart-checkout.css')
+  body
+    nav.navbar
+      img.logo(src='/images/whiteLogo.webp' alt='Naqvix Logo' width='200' height='60')
+      ul.nav-list
+        li
+          a(href='/') Home
+        li
+          a(href='/services') Services
+        li About
+        li Contact
+        li
+          a.cart-link(href='/cart')
+            | 🛒 Cart
+            span#cartBadge.cart-badge 0
+        li 
+          a.onsale-line(href='/services/onsale-services') 🔥 On Sale
+        if user
+          if user.role === 'admin'
+            li
+              a(href='/admin/dashboard') Admin Panel
+          li
+            a(href='/orders') 📦 My Orders
+          li
+            a(href='/auth/logout') 👤 Logout
+        else
+          li
+            a(href='/auth/login') 🔑 Login
+          li
+            a(href='/auth/register') ✍️ Register
+      img#hamburger.menu-icon(src='/images/menu.png' alt='Menu' width='40' height='40')
+
+    main.main-content
+      if success && success.length > 0
+        .flash-container
+          each msg in success
+            .alert.alert-success
+              = msg
+      if error && error.length > 0
+        .flash-container
+          each msg in error
+            .alert.alert-error
+              = msg
+      block content
+
+    footer.footer
+      .footer-content
+        .logo-section
+          img(src='/images/whiteLogo.webp' alt='Naqvix' width='180' height='100')
+        .links-section
+          h3 Links
+          ul
+            li
+              a(href='/') Home
+            li
+              a(href='/services') Services
+            li About
+            li Contact
+        .links-section
+          h3 Company
+          ul
+            li
+              a(href='#') About Us
+            li
+              a(href='#') Team
+            li
+              a(href='#') Blog
+            li
+              a(href='#') Careers
+        .contact-section
+          h3 Contact
+          p Email: info@naqvix.com
+          p Phone: +92 328 9660289
+
+    script(src='/javascripts/main.js')
+    script.
+      // Update cart badge on page load
+      function updateCartBadge() {
+        const cart = JSON.parse(localStorage.getItem('naqvixCart') || '[]');
+        const total = cart.reduce((sum, item) => sum + item.quantity, 0);
+        const badge = document.getElementById('cartBadge');
+        if (badge) {
+          badge.textContent = total;
+          badge.style.display = total > 0 ? 'block' : 'none';
+        }
+      }
+
+      // Check for auth token in page data (passed from flash or session)
+      function initializeAuth() {
+        // Try to get token from various sources
+        let token = localStorage.getItem('authToken');
+        
+        // If no token in localStorage, check if one was just provided
+        const scripts = document.querySelectorAll('script');
+        for (let script of scripts) {
+          if (script.textContent && script.textContent.includes('saveAuthToken')) {
+            // Token will be saved by calling function
+            break;
+          }
+        }
+      }
+
+      // Handle login - save auth token
+      window.saveAuthToken = function(token) {
+        localStorage.setItem('authToken', token);
+        console.log('Auth token saved');
+      };
+
+      document.addEventListener('DOMContentLoaded', function() {
+        updateCartBadge();
+        initializeAuth();
+      });
+
+      // Listen for storage changes (cart updates from other tabs)
+      window.addEventListener('storage', updateCartBadge);
+
+    // jQuery CDN for client-side pagination and DOM manipulation
+    script(src='https://code.jquery.com/jquery-3.6.0.min.js')
+
+    block scripts

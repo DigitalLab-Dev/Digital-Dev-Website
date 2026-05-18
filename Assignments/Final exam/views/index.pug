@@ -1,0 +1,164 @@
+extends layout
+
+block content
+  .Header
+    .text-block
+      h1.header-heading We Handle the Work, You
+        br
+        | Focus on Growth
+      p.header-para Running a business is tough, but it doesn't have to be
+        br
+        | overwhelming. At NAQVIX, we take care of the heavy lifting:
+        br
+        | from customer support and marketing to AI solutions and
+        br
+        | finance. So you can focus on what matters most (growing
+        br
+        | your business).
+      button.header-cta Start Exploring
+
+    img.header-image(src='/images/syedaliturab.png' alt='Syed Ali Turab')
+
+  .about-us
+    img.about-image(src='/images/about.webp' alt='about image')
+    .about-textblock
+      h1.about-heading
+        span.hyphen
+        | About Us
+      .para-block
+        p.about-para1 We started NAQVIX with a simple belief: businesses deserve smarter support.
+          | Whether you're a start-up chasing growth or an enterprise managing scale, we step in as your
+          | reliable partner. From BPO and KPO services to AI-driven automation, data analytics,
+          | finance, and consulting, we bring together the right mix of people, process, and
+          | technology to help you save time, cut costs, and deliver better results to your
+          | customers.
+        p.about-para2 We don't just 'provide services. ' We build long-term relationships. Because when
+          | you grow, we grow too.
+      button.about-cta Learn More
+
+  .services-section
+    h1.services-heading
+      span.hyphen
+      | Our Services
+    p Where Strategy, Technology & Execution Unite
+    .all-services
+      .service-card
+        h2.service-heading BPO/KPO Services
+        p.service-para Streamline operations with expert outsourcing and knowledge-driven solutions.
+        span.service-line
+        button.service-cta Explore More
+      .service-card
+        h2.service-heading Marketing Solutions
+        p.service-para Boost your brand with data-driven campaigns and creative strategies.
+        span.service-line
+        button.service-cta Explore More
+      .service-card
+        h2.service-heading Artificial Inteligence Solutions
+        p.service-para Leverage AI to automate, predict, and innovate at scale.
+        span.service-line
+        button.service-cta Explore More
+      .service-card
+        h2.service-heading Development Services
+        p.service-para Build scalable apps, websites, and systems tailored to your business.
+        span.service-line
+        button.service-cta Explore More
+      .service-card
+        h2.service-heading Finance & Accounting
+        p.service-para Ensure accuracy and efficiency with our smart financial solutions.
+        span.service-line
+        button.service-cta Explore More
+      .service-card
+        h2.service-heading Data & Analysis
+        p.service-para Transform raw data into actionable insights for growth.
+        span.service-line
+        button.service-cta Explore More
+      .service-card
+        h2.service-heading Automation & RPA
+        p.service-para Enhance efficiency with robotic process automation and workflow optimization.
+        span.service-line
+        button.service-cta Explore More
+      .service-card
+        h2.service-heading Consulting Strategy
+        p.service-para Navigate complex challenges with expert consulting and business strategy.
+        span.service-line
+        button.service-cta Explore More
+
+  .why-we-stand-out
+    .stand-out-left
+      img(src='/images/why-section-image-1.png' alt='Why stand out 1' width='300px' height='600px')
+      .two-images
+        img(src='/images/why-section-image-2.webp' alt='Why stand out 2' width='300px' height='150px')
+        img(src='/images/why-section-image-3.webp' alt='Why stand out 3' width='300px' height='150px')
+    .stand-out-right
+      h1.stand-out-heading
+        span.hyphen
+        | Why We Stand Out
+      .stand-out-cards
+        .stand-out-card
+          h2.stand-out-card-heading End-to-End Solutions
+          p.stand-out-card-para We deliver complete solutions tailored to your business needs.
+        .stand-out-card
+          h2.stand-out-card-heading Global Expertise
+          p.stand-out-card-para Our team brings worldwide experience to every project.
+        .stand-out-card
+          h2.stand-out-card-heading Customized Approach
+          p.stand-out-card-para Solutions designed specifically for your unique challenges.
+        .stand-out-card
+          h2.stand-out-card-heading 24/7 Support
+          p.stand-out-card-para Always available to assist you whenever you need.
+
+  .intro-section
+    h1.intro-heading
+      span.hyphen
+      | Your Industry, Our Expertise
+    p From finance to healthcare, retail to technology, Naqvix delivers innovative solutions that help businesses thrive in
+      br
+      | every industry.
+    .all-expertise
+      .expertise-card
+        h2.expertise-heading Healthcare
+        p.expertise-para AI-driven solutions and analytics to optimize patient care.
+      .expertise-card
+        h2.expertise-heading Retail
+        p.expertise-para Automation and insights to enhance customer experience.
+      .expertise-card
+        h2.expertise-heading E-Commerce
+        p.expertise-para End-to-end solutions to scale online businesses effectively.
+      .expertise-card
+        h2.expertise-heading Real Estate
+        p.expertise-para Data and automation tools to streamline property management.
+      .expertise-card
+        h2.expertise-heading Education
+        p.expertise-para Smart learning solutions, LMS, and AI-powered tutoring.
+      .expertise-card
+        h2.expertise-heading Finance
+        p.expertise-para Automation, analytics, and intelligent solutions for banking and accounting.
+
+  .cta-section
+    .cta-textblock
+      h1.cta-heading Let's Build the Future of
+        br
+        | Your Business
+      p.cta-para Have an idea, a project, or a challenge? Reach out to us and let's build
+        br
+        | something extraordinary together.
+      button.cta-button Start a Conversation
+    img(src='/images/callToaction.webp' alt='CTA Image' width='400px' height='420px')
+
+block scripts
+  script.
+    // Save auth token if available
+    const token = !{token ? `'${token}'` : 'null'};
+    if (token) {
+      localStorage.setItem('authToken', token);
+      console.log('✓ Auth token saved to localStorage');
+    }
+
+    // Scroll to services when clicking buttons
+    document.querySelectorAll('button').forEach(button => {
+      if (button.textContent.includes('Explore') || button.textContent.includes('Start')) {
+        button.addEventListener('click', () => {
+          window.location.href = '/services';
+        });
+      }
+    });

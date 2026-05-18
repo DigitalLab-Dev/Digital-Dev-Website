@@ -1,0 +1,152 @@
+extends layout
+
+block content
+  .services-container
+    .sidebar-filter
+      h2 Filters
+
+      // Search
+      .filter-section
+        label Search Services
+        input#search.search-input(
+          type='text'
+          placeholder='Search by name or description...'
+          value=search
+          onchange='updateFilters()'
+        )
+
+      // Category Filter
+      .filter-section
+        label Category
+        select#category(onchange='updateFilters()')
+          option(value='') All Categories
+          each cat in categories
+            option(value=cat selected=category===cat)= cat
+
+      // Price Range Filter
+      .filter-section
+        label Price Range
+        .price-inputs
+          input#minPrice.price-input(
+            type='number'
+            placeholder='Min Price'
+            value=minPrice
+            onchange='updateFilters()'
+            min='0'
+          )
+          span to
+          input#maxPrice.price-input(
+            type='number'
+            placeholder='Max Price'
+            value=maxPrice
+            onchange='updateFilters()'
+          )
+        .price-range-info
+          p Available range: $#{priceRange.minPrice} - $#{priceRange.maxPrice}
+
+      // Sort By
+      .filter-section
+        label Sort By
+        select#sortBy(onchange='updateFilters()')
+          option(value='name' selected=sortBy==='name') Name (A-Z)
+          option(value='price-low' selected=sortBy==='price-low') Price (Low to High)
+          option(value='price-high' selected=sortBy==='price-high') Price (High to Low)
+          option(value='rating' selected=sortBy==='rating') Rating (Highest)
+          option(value='newest' selected=sortBy==='newest') Newest
+
+      // Clear Filters
+      button.btn.btn-secondary.w-100(onclick='clearFilters()') Clear Filters
+
+    .main-content
+      .services-header
+        h1 Our Services
+        .results-info
+          p Showing 
+            strong= services.length 
+            | of 
+            strong= totalServices 
+            | services
+
+      // No Results
+      if services.length === 0
+        .no-results
+          p No services found matching your criteria.
+          a.btn.btn-primary(href='/services') View All Services
+      else
+        .services-grid
+          each service in services
+            .service-card
+              .service-category
+                span.badge= service.category
+              
+              h3.service-name= service.name
+              
+              p.service-description= service.description.substring(0, 100) + '...'
+              
+              .service-meta
+                .rating
+                  span.stars
+                    each i in [1, 2, 3, 4, 5]
+                      if i <= service.rating
+                        span ★
+                      else
+                        span ☆
+                  span.rating-value #{service.rating}/5
+
+              .outcomes
+                strong Outcomes:
+                ul
+                  each outcome in service.outcomes.slice(0, 2)
+                    li= outcome
+                if service.outcomes.length > 2
+                  li
+                    em +#{service.outcomes.length - 2} more
+
+              .service-footer
+                .price
+                  span.amount $#{service.price}
+                a.btn.btn-primary(href=`/service/${service._id}`) View Details
+
+      // Pagination
+      if totalPages > 1
+        .pagination
+          // Previous Button
+          if hasPrevPage
+            a.page-link(href=`/services?page=${currentPage - 1}&search=${search}&category=${category}&minPrice=${minPrice}&maxPrice=${maxPrice}&sortBy=${sortBy}`) ← Previous
+
+          // Page Numbers
+          each pageNum in paginationArray
+            if pageNum === currentPage
+              span.page-link.active= pageNum
+            else
+              a.page-link(href=`/services?page=${pageNum}&search=${search}&category=${category}&minPrice=${minPrice}&maxPrice=${maxPrice}&sortBy=${sortBy}`)= pageNum
+
+          // Next Button
+          if hasNextPage
+            a.page-link(href=`/services?page=${currentPage + 1}&search=${search}&category=${category}&minPrice=${minPrice}&maxPrice=${maxPrice}&sortBy=${sortBy}`) Next →
+
+        .pagination-info
+          p Page #{currentPage} of #{totalPages}
+
+block scripts
+  script.
+    function updateFilters() {
+      const search = document.getElementById('search').value;
+      const category = document.getElementById('category').value;
+      const minPrice = document.getElementById('minPrice').value;
+      const maxPrice = document.getElementById('maxPrice').value;
+      const sortBy = document.getElementById('sortBy').value;
+
+      const params = new URLSearchParams();
+      if (search) params.append('search', search);
+      if (category) params.append('category', category);
+      if (minPrice) params.append('minPrice', minPrice);
+      if (maxPrice) params.append('maxPrice', maxPrice);
+      if (sortBy) params.append('sortBy', sortBy);
+
+      window.location.href = '/services?' + params.toString();
+    }
+
+    function clearFilters() {
+      window.location.href = '/services';
+    }

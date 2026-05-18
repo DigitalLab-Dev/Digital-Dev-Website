@@ -1,0 +1,311 @@
+extends layout
+
+block content
+  style.
+    .onsale-header {
+      text-align: center;
+      margin-bottom: 50px;
+      color: #333;
+    }
+
+    .onsale-header h1 {
+      font-size: 42px;
+      margin-bottom: 10px;
+      color: #667eea;
+    }
+
+    .onsale-header p {
+      font-size: 18px;
+      color: #666;
+    }
+
+    .sale-badge {
+      display: inline-block;
+      background: #ff6b6b;
+      color: white;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      margin-left: 10px;
+    }
+
+    #service-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 30px;
+      margin-bottom: 60px;
+    }
+
+    .service-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      display: none;
+    }
+
+    .service-card.visible {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .service-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 35px rgba(102, 126, 234, 0.3);
+    }
+
+    .service-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: white;
+      font-weight: bold;
+    }
+
+    .service-content {
+      padding: 20px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .service-category {
+      font-size: 12px;
+      color: #667eea;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+
+    .service-name {
+      font-size: 20px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+
+    .service-description {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 15px;
+      flex: 1;
+      line-height: 1.5;
+    }
+
+    .service-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: auto;
+      padding-top: 15px;
+      border-top: 1px solid #eee;
+    }
+
+    .price-section {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .original-price {
+      font-size: 12px;
+      color: #999;
+      text-decoration: line-through;
+    }
+
+    .sale-price {
+      font-size: 22px;
+      font-weight: bold;
+      color: #ff6b6b;
+    }
+
+    .rating {
+      color: #ffc107;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .pagination-section {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      margin-top: 60px;
+      padding: 30px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      flex-wrap: wrap;
+    }
+
+    .pagination-btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .pagination-btn:hover:not(:disabled) {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .pagination-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    .pagination-info {
+      font-size: 18px;
+      color: #333;
+      font-weight: 600;
+      min-width: 200px;
+      text-align: center;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #666;
+    }
+
+    .empty-state h3 {
+      font-size: 28px;
+      color: #333;
+      margin-bottom: 15px;
+    }
+
+    .empty-state p {
+      font-size: 18px;
+    }
+
+  .onsale-header
+    h1
+      | 🎯 On-Sale Services
+      span.sale-badge HOT DEALS
+    p Discover our exclusive promotional services - Limited time offers!
+
+  if services && services.length > 0
+    #service-list
+      each service in services
+        .service-card
+          if service.image && service.image !== '/images/service-default.png'
+            img.service-image(src=service.image, alt=service.name)
+          else
+            .service-image= `📦 ${service.category}`
+
+          .service-content
+            .service-category= service.category
+            h3.service-name= service.name
+            p.service-description
+              != service.description.substring(0, 100) + '...'
+
+            .service-footer
+              .price-section
+                if service.salePrice && service.salePrice < service.price
+                  .original-price= `₹${service.price}`
+                  .sale-price= `₹${service.salePrice}`
+                else
+                  .sale-price= `₹${service.price}`
+              .rating
+                != `⭐ ${(service.rating || 0).toFixed(1)}`
+  else
+    .empty-state
+      h3 No On-Sale Services Available
+      p Check back soon for our promotional offers!
+
+  if services && services.length > 0
+    .pagination-section
+      button#prev-btn.pagination-btn ← Previous
+      .pagination-info
+        span#page-info Page 1 of 1
+      button#next-btn.pagination-btn Next →
+
+block scripts
+  script.
+    // Client-side jQuery pagination script - runs after jQuery loadsipts
+  script.
+    // Client-side jQuery pagination script - runs after jQuery loads
+    $(document).ready(function() {
+      const ITEMS_PER_PAGE = 10;
+      let currentPage = 1;
+      const serviceCards = $('.service-card');
+      const totalServices = serviceCards.length;
+      const totalPages = Math.ceil(totalServices / ITEMS_PER_PAGE);
+
+      /**
+       * Display services for a specific page
+       */
+      function displayPage(page) {
+        // Hide all service cards
+        serviceCards.removeClass('visible');
+
+        // Calculate start and end indices
+        const startIndex = (page - 1) * ITEMS_PER_PAGE;
+        const endIndex = startIndex + ITEMS_PER_PAGE;
+
+        // Show only the services for this page
+        serviceCards.slice(startIndex, endIndex).addClass('visible');
+
+        // Update page info text
+        const pageInfo = `Page ${page} of ${totalPages}`;
+        $('#page-info').text(pageInfo);
+
+        // Update button states
+        updateButtonStates(page);
+
+        // Scroll to top of service list
+        $('html, body').animate({
+          scrollTop: $('#service-list').offset().top - 100
+        }, 300);
+      }
+
+      /**
+       * Update the state of Previous and Next buttons
+       */
+      function updateButtonStates(page) {
+        // Disable Previous button if on first page
+        $('#prev-btn').prop('disabled', page === 1);
+
+        // Disable Next button if on last page
+        $('#next-btn').prop('disabled', page === totalPages);
+      }
+
+      /**
+       * Next button click handler
+       */
+      $('#next-btn').on('click', function() {
+        if (currentPage < totalPages) {
+          currentPage++;
+          displayPage(currentPage);
+        }
+      });
+
+      /**
+       * Previous button click handler
+       */
+      $('#prev-btn').on('click', function() {
+        if (currentPage > 1) {
+          currentPage--;
+          displayPage(currentPage);
+        }
+      });
+
+      // Initialize: Display first page on page load
+      displayPage(currentPage);
+    });

@@ -1,0 +1,149 @@
+extends layout
+
+block content
+  .cart-container
+    .breadcrumb
+      a(href='/') Home
+      span /
+      span Cart
+
+    h1 Shopping Cart
+
+    #emptyCartMessage.empty-cart(style='display:none;')
+      .empty-icon 🛒
+      p Your cart is empty
+      p Start adding services to get started!
+      a.btn.btn-primary(href='/services') Browse Services
+
+    #cartContent.cart-content(style='display:none;')
+      .cart-items
+        table.cart-table
+          thead
+            tr
+              th Service Name
+              th Price
+              th Quantity
+              th Subtotal
+              th Action
+          tbody#cartTableBody
+
+      .cart-summary
+        .summary-box
+          h2 Order Summary
+
+          .summary-row
+            span Subtotal:
+            span#subtotalDisplay.amount $0
+
+          .summary-row
+            span Tax (0%):
+            span.amount $0
+
+          .summary-row.total
+            span Total:
+            span#totalDisplay.amount.total-amount $0
+
+          button.btn.btn-primary.btn-large(onclick='proceedToCheckout()') 
+            | 💳 Proceed to Checkout
+
+          button.btn.btn-outline(onclick='continueShopping()')
+            | Continue Shopping
+
+block scripts
+  script.
+    function getCart() {
+      const cart = localStorage.getItem('naqvixCart');
+      return cart ? JSON.parse(cart) : [];
+    }
+
+    function saveCart(cart) {
+      localStorage.setItem('naqvixCart', JSON.stringify(cart));
+      renderCart();
+    }
+
+    function renderCart() {
+      const cart = getCart();
+      const emptyMsg = document.getElementById('emptyCartMessage');
+      const content = document.getElementById('cartContent');
+      const tableBody = document.getElementById('cartTableBody');
+
+      if (cart.length === 0) {
+        emptyMsg.style.display = 'block';
+        content.style.display = 'none';
+        return;
+      }
+
+      emptyMsg.style.display = 'none';
+      content.style.display = 'grid';
+
+      let html = '';
+      let subtotal = 0;
+
+      cart.forEach(item => {
+        const itemSubtotal = item.price * item.quantity;
+        subtotal += itemSubtotal;
+
+        html += `
+          <tr class="cart-item" data-service-id="${item.serviceId}">
+            <td>
+              <a href="/service/${item.serviceId}">${item.serviceName}</a>
+            </td>
+            <td>$${item.price}</td>
+            <td>
+              <div class="quantity-controls">
+                <button class="qty-btn" type="button" onclick="updateQuantity('${item.serviceId}', -1)">−</button>
+                <input class="qty-input" type="number" value="${item.quantity}" min="1" readonly>
+                <button class="qty-btn" type="button" onclick="updateQuantity('${item.serviceId}', 1)">+</button>
+              </div>
+            </td>
+            <td class="subtotal">$${itemSubtotal}</td>
+            <td>
+              <button class="btn btn-danger btn-small" onclick="removeFromCart('${item.serviceId}')">Remove</button>
+            </td>
+          </tr>
+        `;
+      });
+
+      tableBody.innerHTML = html;
+      document.getElementById('subtotalDisplay').textContent = '$' + subtotal;
+      document.getElementById('totalDisplay').textContent = '$' + subtotal;
+    }
+
+    function updateQuantity(serviceId, change) {
+      let cart = getCart();
+      const item = cart.find(i => i.serviceId === serviceId);
+      if (item) {
+        item.quantity += change;
+        if (item.quantity <= 0) {
+          removeFromCart(serviceId);
+          return;
+        }
+        saveCart(cart);
+      }
+    }
+
+    function removeFromCart(serviceId) {
+      if (confirm('Remove this service from cart?')) {
+        let cart = getCart();
+        cart = cart.filter(item => item.serviceId !== serviceId);
+        saveCart(cart);
+      }
+    }
+
+    function proceedToCheckout() {
+      const cart = getCart();
+      if (cart.length === 0) {
+        alert('Your cart is empty!');
+        return;
+      }
+      window.location.href = '/checkout';
+    }
+
+    function continueShopping() {
+      window.location.href = '/services';
+    }
+
+    // Render cart on page load
+    document.addEventListener('DOMContentLoaded', renderCart);
+    window.addEventListener('storage', renderCart);
+
