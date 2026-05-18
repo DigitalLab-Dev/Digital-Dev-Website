@@ -1,61 +1,96 @@
-# Dependencies
+# ============================================================================
+# GLOBAL GITIGNORE - Comprehensive exclusion for all unnecessary files
+# ============================================================================
+
+# ============================================================================
+# DEPENDENCIES & PACKAGE MANAGEMENT
+# ============================================================================
 node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+.npm
+.pnpm-store/
 package-lock.json
 yarn.lock
 pnpm-lock.yaml
-.npm
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 .eslintcache
+.parcel-cache
+.cache-loader/
 
-# Environment Variables
+# ============================================================================
+# ENVIRONMENT & CONFIGURATION
+# ============================================================================
 .env
 .env.local
 .env.*.local
 .env.development
+.env.development.local
+.env.test
 .env.test.local
 .env.production
+.env.production.local
+.npmrc
+.yarnrc
 
-# IDE / Editor
+# ============================================================================
+# IDE & EDITOR FILES
+# ============================================================================
 .vscode/
+.vscode-test/
 .idea/
-*.swp
-*.swo
-*.swn
-*~
-.DS_Store
+.sublime-project
+.sublime-workspace
+*.sublime-project
+*.sublime-workspace
 .project
 .classpath
 .c9/
 *.launch
 .settings/
-*.sublime-workspace
-.sublime-project
-.vs/
-.vscode-test
+.wsconfig
+*.swp
+*.swo
+*.swn
+*~
+.vim/
+.netrwhist
 jsconfig.json.bak
 tsconfig.json.bak
+.pylintrc.bak
 
-# Operating System
+# ============================================================================
+# OPERATING SYSTEM FILES
+# ============================================================================
+# macOS
+.DS_Store
 .AppleDouble
 .AppleDB
 .LSOverride
+._*
+.Spotlight-V100
+.Trashes
+.VolumeIcon.icns
+
+# Windows
 Thumbs.db
 ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.TemporaryItems
+.Trashes
+.LSOverride
 Network Trash Folder
 Temporary Items
-desktop.ini
+
+# Linux
 .nfs*
+.directory
+.Trash-*
 
-# Logs
-logs/
-*.log
-*.pid
-*.seed
-*.pid.lock
-
-# Build & Distribution
+# ============================================================================
+# BUILD & DISTRIBUTION ARTIFACTS
+# ============================================================================
 dist/
 build/
 out/
@@ -63,41 +98,149 @@ out/
 .next/
 .nuxt/
 .turbo/
+.turbopack/
+__pycache__/
+*.egg-info/
+*.egg
+*.whl
+.pytest_cache/
+.venv/
+venv/
+ENV/
+env/
 
-# Testing & Coverage
+# ============================================================================
+# LOGS & OUTPUT
+# ============================================================================
+logs/
+log/
+*.log
+*.pid
+*.seed
+*.seed.*
+*.pid.lock
+lerna-debug.log*
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+pids/
+*.pid
+*.seed
+
+# ============================================================================
+# TESTING & CODE COVERAGE
+# ============================================================================
 coverage/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
 .nyc_output/
-.mocha
+.mocha/
 .test-results/
+junit.xml
+test-results/
 
-# Cache
+# ============================================================================
+# CACHING & TEMPORARY FILES
+# ============================================================================
 .cache/
 .eslintcache
-.cache-loader/
-
-# Temporary Files
 tmp/
 temp/
 tempfiles/
+temp_files/
 restart.pid
+.turbo/
+*.cache
 
-# Uploads & Media
-public/uploads/
-uploads/
-temp/
-*.jpg
-*.jpeg
-*.png
-*.gif
-*.mov
-*.mp4
-*.zip
+# ============================================================================
+# DOCUMENTATION (Keep only README.md files)
+# ============================================================================
+API_DOCUMENTATION.md
+QUICK_START_GUIDE.md
+SUMMARY_GUIDE.md
+TEST_RESULTS.md
+ARCHITECTURE.md
+DEPLOYMENT.md
+SETUP_GUIDE.md
+TROUBLESHOOTING.md
+CHANGELOG.md
+/docs/**
+!README.md
 
-# Database
+# ============================================================================
+# DATABASE & DATA FILES
+# ============================================================================
 *.sqlite
 *.sqlite3
 *.db
 dump.rdb
+*.pdb
+*.mdb
+*.accdb
+data.json
+.data/
+db/
+database/
+
+# ============================================================================
+# MEDIA & UPLOADS
+# ============================================================================
+public/uploads/
+uploads/
+media/
+images/temp/
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.bmp
+*.tiff
+*.webp
+*.svg
+*.mov
+*.mp4
+*.avi
+*.mkv
+*.flv
+*.wmv
+*.webm
+*.zip
+*.rar
+*.7z
+*.tar
+*.tar.gz
+
+# ============================================================================
+# SYSTEM & GENERATED FILES
+# ============================================================================
+.DS_Store
+.AppleDouble
+.AppleDB
+Thumbs.db
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+.env.*.encrypted
+*.pem
+*.key
+!public/
+!.gitkeep
+
+# ============================================================================
+# MISC PROJECT FILES
+# ============================================================================
+.history/
+.versionbot/
+.rpt2_cache/
+*.tgz
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
 *.sqlite-journal
 
 # Dependencies & Vendors
